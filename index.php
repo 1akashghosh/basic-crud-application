@@ -1,4 +1,5 @@
 <?php
+session_start();
 $insert = false;
 $update = false;
 $delete = false;
@@ -350,30 +351,32 @@ if ($loggedIn) {
     </script>
     <script>
       // Edit handlers
-      document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", () => {
         const edits = document.getElementsByClassName("edit");
         Array.from(edits).forEach((element) => {
           element.addEventListener("click", function(e) {
             const tr = e.target.closest("tr");
             const title = tr.getElementsByTagName("td")[0].innerText;
             const description = tr.getElementsByTagName("td")[1].innerText;
+
             document.getElementById('titleEdit').value = title;
             document.getElementById('descriptionEdit').value = description;
             document.getElementById('snoEdit').value = e.target.id;
+
             var myModal = new bootstrap.Modal(document.getElementById('editmodal'));
             myModal.show();
           });
+          });
         });
-      });
-
-      // Delete handlers
+    </script>
+    <script>
       document.addEventListener("DOMContentLoaded", () => {
         const deletes = document.getElementsByClassName("delete");
         Array.from(deletes).forEach((element) => {
           element.addEventListener("click", function(e) {
             const sno = e.target.id.substring(1);
             if (confirm("Delete this note?")) {
-              window.location = <?= htmlspecialchars($_SERVER['PHP_SELF']) ?>?delete=${sno};
+              window.location = <?= json_encode($_SERVER['PHP_SELF']) ?> + "?delete=" + sno;
             }
           });
         });
